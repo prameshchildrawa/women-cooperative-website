@@ -7,8 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def reset_admin(request):
     """Secure admin reset endpoint. Only accessible with correct secret."""
-    # Use environment variable or strong fallback secret
-    valid_secret = os.environ.get('ADMIN_RESET_SECRET', 'msmc_secure_reset_2024!@#')
+    # Use environment variable or strong fallback secret (URL-safe)
+    valid_secret = os.environ.get('ADMIN_RESET_SECRET', 'msmc_reset_2024_secure_key_xyz')
     provided_secret = request.GET.get('secret')
     
     if provided_secret != valid_secret:
