@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% if current_language == 'ne' %}{{ page.title_np }}{% else %}{{ page.title_en }}{% endif %} - {{ block.super }}{% endblock %}
+
+{% block meta_description %}{% if current_language == 'ne' %}{{ page.meta_description_np }}{% else %}{{ page.meta_description_en }}{% endif %}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-success text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="fw-bold mb-2">
+                    {% if current_language == 'ne' %}{{ page.title_np }}{% else %}{{ page.title_en }}{% endif %}
+                </h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white text-decoration-none">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">
+                            {% if current_language == 'ne' %}{{ page.title_np }}{% else %}{{ page.title_en }}{% endif %}
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Page Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="page-content">
+                    {% if current_language == 'ne' %}{{ page.content_np|safe }}{% else %}{{ page.content_en|safe }}{% endif %}
+                </div>
+                
+                <!-- Last Updated -->
+                <div class="mt-5 pt-4 border-top">
+                    <p class="text-muted small mb-0">
+                        <i class="far fa-clock me-2"></i>
+                        {% trans 'Last updated:' %} {{ page.updated_at|date:"F d, Y" }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact CTA -->
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <h3 class="fw-bold mb-3">{% trans 'Have Questions?' %}</h3>
+        <p class="lead mb-4">{% trans 'Contact us for more information or clarification.' %}</p>
+        <a href="{% url 'website:contact' %}" class="btn btn-success btn-lg">
+            <i class="fas fa-envelope me-2"></i>{% trans 'Contact Us' %}
+        </a>
+    </div>
+</section>
+{% endblock %}

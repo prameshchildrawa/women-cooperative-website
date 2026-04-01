@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% if current_language == 'ne' %}{{ service.title_np }}{% else %}{{ service.title_en }}{% endif %} - {{ block.super }}{% endblock %}
+
+{% block meta_description %}{% if current_language == 'ne' %}{{ service.short_description_np }}{% else %}{{ service.short_description_en }}{% endif %}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-success text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-2">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white text-decoration-none">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'website:services' %}" class="text-white text-decoration-none">{% trans 'Services' %}</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">
+                            {% if current_language == 'ne' %}{{ service.title_np }}{% else %}{{ service.title_en }}{% endif %}
+                        </li>
+                    </ol>
+                </nav>
+                <h1 class="fw-bold mb-2">
+                    {% if current_language == 'ne' %}{{ service.title_np }}{% else %}{{ service.title_en }}{% endif %}
+                </h1>
+                <span class="badge bg-white text-success">{{ service.get_service_type_display }}</span>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <a href="{% url 'website:membership' %}" class="btn btn-light btn-lg">
+                    <i class="fas fa-user-plus me-2"></i>{% trans 'Apply Now' %}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                {% if service.image %}
+                <img src="{{ service.image.url }}" alt="{{ service.title_en }}" class="img-fluid rounded shadow mb-4" style="width: 100%; max-height: 400px; object-fit: cover;">
+                {% endif %}
+                
+                <div class="service-content">
+                    {% if current_language == 'ne' %}{{ service.full_description_np|safe }}{% else %}{{ service.full_description_en|safe }}{% endif %}
+                </div>
+                
+                <!-- Features -->
+                {% if service.features_en %}
+                <div class="service-features mt-5">
+                    <h4 class="fw-bold mb-3">{% trans 'Features & Benefits' %}</h4>
+                    <div class="card border-0 shadow-sm bg-light">
+                        <div class="card-body">
+                            {% if current_language == 'ne' %}{{ service.features_np|safe }}{% else %}{{ service.features_en|safe }}{% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Eligibility -->
+                {% if service.eligibility_en %}
+                <div class="service-eligibility mt-4">
+                    <h4 class="fw-bold mb-3">{% trans 'Eligibility' %}</h4>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            {% if current_language == 'ne' %}{{ service.eligibility_np|safe }}{% else %}{{ service.eligibility_en|safe }}{% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Documents Required -->
+                {% if service.documents_required_en %}
+                <div class="service-documents mt-4">
+                    <h4 class="fw-bold mb-3">{% trans 'Documents Required' %}</h4>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            {% if current_language == 'ne' %}{{ service.documents_required_np|safe }}{% else %}{{ service.documents_required_en|safe }}{% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Interest Rate Info -->
+                {% if service.interest_rate_info_en %}
+                <div class="service-rates mt-4">
+                    <h4 class="fw-bold mb-3">{% trans 'Interest Rates & Fees' %}</h4>
+                    <div class="alert alert-success">
+                        {% if current_language == 'ne' %}{{ service.interest_rate_info_np }}{% else %}{{ service.interest_rate_info_en }}{% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- CTA -->
+                <div class="service-cta mt-5 text-center">
+                    <div class="card border-success">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-3">{% trans 'Interested in this service?' %}</h5>
+                            <p class="text-muted mb-3">{% trans 'Contact us today or visit our nearest branch to get started.' %}</p>
+                            <a href="{% url 'website:contact' %}" class="btn btn-success btn-lg">
+                                <i class="fas fa-phone-alt me-2"></i>{% trans 'Contact Us' %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Quick Contact -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-phone-alt me-2"></i>{% trans 'Quick Contact' %}</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if site_settings %}
+                        <p class="mb-2">
+                            <i class="fas fa-phone text-success me-2"></i>{{ site_settings.phone }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-envelope text-success me-2"></i>{{ site_settings.email }}
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-map-marker-alt text-success me-2"></i>
+                            {% if current_language == 'ne' %}{{ site_settings.address_np }}{% else %}{{ site_settings.address_en }}{% endif %}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Other Services -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-th-large me-2"></i>{% trans 'Other Services' %}</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for other_service in nav_services %}
+                        {% if other_service.slug != service.slug %}
+                        <a href="{% url 'website:service_detail' other_service.slug %}" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-chevron-right text-success me-2 small"></i>
+                                {% if current_language == 'ne' %}{{ other_service.title_np }}{% else %}{{ other_service.title_en }}{% endif %}
+                            </div>
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

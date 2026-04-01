@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Notices' %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-success text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="fw-bold mb-2">{% trans 'Notices & Announcements' %}</h1>
+                <p class="mb-0 lead">{% trans 'Important updates and announcements from our cooperative' %}</p>
+                <nav aria-label="breadcrumb" class="mt-2">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white text-decoration-none">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">{% trans 'Notices' %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Notices Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Filters -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <form action="{% url 'website:notices' %}" method="get" class="row g-3">
+                            <div class="col-md-6">
+                                <select name="type" class="form-select">
+                                    <option value="">{% trans 'All Notice Types' %}</option>
+                                    {% for type_value, type_label in notice_types %}
+                                    <option value="{{ type_value }}" {% if current_type == type_value %}selected{% endif %}>{{ type_label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-filter me-2"></i>{% trans 'Filter' %}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                {% if notices %}
+                <div class="notices-list">
+                    {% for notice in notices %}
+                    <div class="card notice-card mb-3 border-0 shadow-sm {% if notice.is_urgent %}border-start border-4 border-danger{% endif %}">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-start">
+                                <div class="notice-icon me-3">
+                                    {% if notice.is_urgent %}
+                                    <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-exclamation"></i>
+                                    </div>
+                                    {% else %}
+                                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-bullhorn"></i>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            {% if notice.is_urgent %}
+                                            <span class="badge bg-danger me-2">{% trans 'URGENT' %}</span>
+                                            {% endif %}
+                                            <span class="badge bg-success bg-opacity-10 text-success">{{ notice.get_notice_type_display }}</span>
+                                        </div>
+                                        <small class="text-muted">
+                                            <i class="far fa-calendar-alt me-1"></i>{{ notice.published_date|date:"F d, Y" }}
+                                        </small>
+                                    </div>
+                                    <h5 class="card-title fw-bold mb-2">
+                                        {% if current_language == 'ne' %}{{ notice.title_np }}{% else %}{{ notice.title_en }}{% endif %}
+                                    </h5>
+                                    <div class="notice-content text-muted mb-3">
+                                        {% if current_language == 'ne' %}{{ notice.content_np|safe|truncatewords:50 }}{% else %}{{ notice.content_en|safe|truncatewords:50 }}{% endif %}
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <button class="btn btn-outline-success btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#notice{{ notice.id }}">
+                                            <i class="fas fa-expand-alt me-1"></i>{% trans 'Read More' %}
+                                        </button>
+                                        {% if notice.attachment %}
+                                        <a href="{{ notice.attachment.url }}" class="btn btn-primary btn-sm" target="_blank" download>
+                                            <i class="fas fa-download me-1"></i>{% trans 'Download' %}
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                    <!-- Full Content Collapse -->
+                                    <div class="collapse mt-3" id="notice{{ notice.id }}">
+                                        <div class="card card-body bg-light">
+                                            {% if current_language == 'ne' %}{{ notice.content_np|safe }}{% else %}{{ notice.content_en|safe }}{% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pagination -->
+                {% if is_paginated %}
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_type %}&type={{ current_type }}{% endif %}">{% trans 'Previous' %}</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if current_type %}&type={{ current_type }}{% endif %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_type %}&type={{ current_type }}{% endif %}">{% trans 'Next' %}</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                {% else %}
+                <div class="text-center py-5">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle fa-2x mb-2"></i>
+                        <h5>{% trans 'No notices available' %}</h5>
+                        <p class="mb-0">{% trans 'There are currently no notices to display.' %}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Notice Types -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-filter me-2"></i>{% trans 'Notice Types' %}</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'website:notices' %}" class="list-group-item list-group-item-action {% if not current_type %}active{% endif %}">
+                            {% trans 'All Notices' %}
+                        </a>
+                        {% for type_value, type_label in notice_types %}
+                        <a href="?type={{ type_value }}" class="list-group-item list-group-item-action {% if current_type == type_value %}active{% endif %}">
+                            {{ type_label }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Urgent Notices -->
+                {% if urgent_notices %}
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>{% trans 'Urgent Notices' %}</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for urgent in urgent_notices %}
+                        <div class="list-group-item">
+                            <small class="text-muted">{{ urgent.published_date|date:"M d, Y" }}</small>
+                            <h6 class="mb-0 small fw-bold mt-1">
+                                {% if current_language == 'ne' %}{{ urgent.title_np }}{% else %}{{ urgent.title_en }}{% endif %}
+                            </h6>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

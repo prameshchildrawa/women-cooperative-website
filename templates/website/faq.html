@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'FAQ' %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-success text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="fw-bold mb-2">{% trans 'Frequently Asked Questions' %}</h1>
+                <p class="mb-0 lead">{% trans 'Find answers to commonly asked questions' %}</p>
+                <nav aria-label="breadcrumb" class="mt-2">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white text-decoration-none">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">{% trans 'FAQ' %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                {% if faqs %}
+                <div class="accordion" id="faqAccordion">
+                    {% for faq in faqs %}
+                    <div class="accordion-item border-0 shadow-sm mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" 
+                                    data-bs-toggle="collapse" data-bs-target="#faq{{ faq.id }}" 
+                                    aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}">
+                                <span class="fw-bold">
+                                    {% if current_language == 'ne' %}{{ faq.question_np }}{% else %}{{ faq.question_en }}{% endif %}
+                                </span>
+                            </button>
+                        </h2>
+                        <div id="faq{{ faq.id }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" 
+                             data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                {% if current_language == 'ne' %}{{ faq.answer_np|safe }}{% else %}{{ faq.answer_en|safe }}{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle fa-2x mb-2"></i>
+                        <h5>{% trans 'No FAQs available' %}</h5>
+                        <p class="mb-0">{% trans 'Our FAQ section will be updated soon with helpful information.' %}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact CTA -->
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <h3 class="fw-bold mb-3">{% trans 'Still have questions?' %}</h3>
+        <p class="lead mb-4">{% trans 'Contact us and we will be happy to help you.' %}</p>
+        <a href="{% url 'website:contact' %}" class="btn btn-success btn-lg">
+            <i class="fas fa-envelope me-2"></i>{% trans 'Contact Us' %}
+        </a>
+    </div>
+</section>
+{% endblock %}

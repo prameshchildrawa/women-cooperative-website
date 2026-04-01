@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Our Branches' %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-success text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="fw-bold mb-2">{% trans 'Our Branches' %}</h1>
+                <p class="mb-0 lead">{% trans 'Visit us at any of our convenient service centers' %}</p>
+                <nav aria-label="breadcrumb" class="mt-2">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white text-decoration-none">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">{% trans 'Branches' %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Branches List -->
+<section class="py-5">
+    <div class="container">
+        {% if branches %}
+        <div class="row g-4">
+            {% for branch in branches %}
+            <div class="col-lg-6">
+                <div class="card branch-detail-card h-100 border-0 shadow-sm">
+                    <div class="row g-0">
+                        <div class="col-md-5">
+                            <div class="h-100 bg-light d-flex align-items-center justify-content-center p-4">
+                                <div class="text-center">
+                                    <div class="branch-icon-lg bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
+                                        <i class="fas fa-building fa-3x"></i>
+                                    </div>
+                                    {% if branch.is_main_branch %}
+                                    <span class="badge bg-success d-block">{% trans 'Head Office' %}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body p-4">
+                                <h4 class="card-title fw-bold mb-3">
+                                    {% if current_language == 'ne' %}{{ branch.name_np }}{% else %}{{ branch.name_en }}{% endif %}
+                                </h4>
+                                
+                                <ul class="list-unstyled mb-3">
+                                    <li class="mb-2 d-flex">
+                                        <i class="fas fa-map-marker-alt text-success me-3 mt-1"></i>
+                                        <span>
+                                            {% if current_language == 'ne' %}{{ branch.address_np }}{% else %}{{ branch.address_en }}{% endif %}
+                                        </span>
+                                    </li>
+                                    {% if branch.phone %}
+                                    <li class="mb-2">
+                                        <i class="fas fa-phone text-success me-3"></i>{{ branch.phone }}
+                                    </li>
+                                    {% endif %}
+                                    {% if branch.email %}
+                                    <li class="mb-2">
+                                        <i class="fas fa-envelope text-success me-3"></i>{{ branch.email }}
+                                    </li>
+                                    {% endif %}
+                                    {% if branch.manager_name %}
+                                    <li class="mb-2">
+                                        <i class="fas fa-user text-success me-3"></i>
+                                        <strong>{% trans 'Manager:' %}</strong> {{ branch.manager_name }}
+                                    </li>
+                                    {% endif %}
+                                    {% if branch.opening_hours_en %}
+                                    <li>
+                                        <i class="far fa-clock text-success me-3"></i>
+                                        {% if current_language == 'ne' %}{{ branch.opening_hours_np }}{% else %}{{ branch.opening_hours_en }}{% endif %}
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                                
+                                {% if branch.map_embed %}
+                                <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#mapModal{{ branch.id }}">
+                                    <i class="fas fa-map-marked-alt me-2"></i>{% trans 'View Map' %}
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Modal -->
+            {% if branch.map_embed %}
+            <div class="modal fade" id="mapModal{{ branch.id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold">
+                                {% if current_language == 'ne' %}{{ branch.name_np }}{% else %}{{ branch.name_en }}{% endif %}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-0">
+                            <div style="height: 400px;">
+                                {{ branch.map_embed|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                <h5>{% trans 'Branch information will be updated soon' %}</h5>
+                <p class="mb-0">{% trans 'Please check back later for our complete list of service centers.' %}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Contact CTA -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mb-3 mb-lg-0">
+                <h3 class="fw-bold mb-2">{% trans 'Need Directions?' %}</h3>
+                <p class="mb-0">{% trans 'Contact us and we will be happy to guide you to our nearest branch.' %}</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'website:contact' %}" class="btn btn-success btn-lg">
+                    <i class="fas fa-phone-alt me-2"></i>{% trans 'Contact Us' %}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% if current_language == 'ne' %}{{ news.title_np }}{% else %}{{ news.title_en }}{% endif %} - {{ block.super }}{% endblock %}
+
+{% block meta_description %}{% if current_language == 'ne' %}{{ news.meta_description_np }}{% else %}{{ news.meta_description_en }}{% endif %}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-success text-white py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-2">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white text-decoration-none">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'website:news_list' %}" class="text-white text-decoration-none">{% trans 'News' %}</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">{% trans 'Article' %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- News Article -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <article class="news-article">
+                    <!-- Category & Date -->
+                    <div class="d-flex align-items-center mb-3">
+                        {% if news.category %}
+                        <span class="badge bg-success me-2">
+                            {% if current_language == 'ne' %}{{ news.category.name_np }}{% else %}{{ news.category.name_en }}{% endif %}
+                        </span>
+                        {% endif %}
+                        <small class="text-muted">
+                            <i class="far fa-calendar-alt me-1"></i>{{ news.published_date|date:"F d, Y" }}
+                            <span class="mx-2">|</span>
+                            <i class="far fa-eye me-1"></i>{{ news.views_count }} {% trans 'views' %}
+                        </small>
+                    </div>
+                    
+                    <!-- Title -->
+                    <h1 class="fw-bold mb-4">
+                        {% if current_language == 'ne' %}{{ news.title_np }}{% else %}{{ news.title_en }}{% endif %}
+                    </h1>
+                    
+                    <!-- Featured Image -->
+                    {% if news.image %}
+                    <img src="{{ news.image.url }}" class="img-fluid rounded shadow mb-4" alt="{{ news.title_en }}" style="width: 100%; max-height: 500px; object-fit: cover;">
+                    {% endif %}
+                    
+                    <!-- Content -->
+                    <div class="news-content">
+                        {% if current_language == 'ne' %}{{ news.content_np|safe }}{% else %}{{ news.content_en|safe }}{% endif %}
+                    </div>
+                    
+                    <!-- Share Buttons -->
+                    <div class="share-section mt-5 pt-4 border-top">
+                        <h6 class="fw-bold mb-3">{% trans 'Share this article:' %}</h6>
+                        <div class="d-flex gap-2">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fab fa-facebook-f me-1"></i>{% trans 'Facebook' %}
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|urlencode }}&text={{ news.title_en|urlencode }}" target="_blank" class="btn btn-info btn-sm text-white">
+                                <i class="fab fa-twitter me-1"></i>{% trans 'Twitter' %}
+                            </a>
+                            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri|urlencode }}" target="_blank" class="btn btn-secondary btn-sm">
+                                <i class="fab fa-linkedin-in me-1"></i>{% trans 'LinkedIn' %}
+                            </a>
+                            <a href="mailto:?subject={{ news.title_en|urlencode }}&body={{ request.build_absolute_uri|urlencode }}" class="btn btn-success btn-sm">
+                                <i class="fas fa-envelope me-1"></i>{% trans 'Email' %}
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Related News -->
+                {% if related_news %}
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-newspaper me-2"></i>{% trans 'Related News' %}</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for related in related_news %}
+                        <a href="{{ related.get_absolute_url }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-start">
+                                {% if related.image %}
+                                <img src="{{ related.image.url }}" class="rounded me-3" alt="" style="width: 60px; height: 60px; object-fit: cover;">
+                                {% endif %}
+                                <div>
+                                    <h6 class="mb-1 small fw-bold">
+                                        {% if current_language == 'ne' %}{{ related.title_np }}{% else %}{{ related.title_en }}{% endif %}
+                                    </h6>
+                                    <small class="text-muted">{{ related.published_date|date:"M d, Y" }}</small>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Latest News -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-clock me-2"></i>{% trans 'Latest News' %}</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for latest in latest_news|slice:":5" %}
+                        {% if latest.id != news.id %}
+                        <a href="{{ latest.get_absolute_url }}" class="list-group-item list-group-item-action">
+                            <small class="text-muted">{{ latest.published_date|date:"M d, Y" }}</small>
+                            <h6 class="mb-0 small fw-bold mt-1">
+                                {% if current_language == 'ne' %}{{ latest.title_np }}{% else %}{{ latest.title_en }}{% endif %}
+                            </h6>
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Navigation -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <a href="{% url 'website:news_list' %}" class="btn btn-outline-success">
+                    <i class="fas fa-arrow-left me-2"></i>{% trans 'Back to News' %}
+                </a>
+            </div>
+            <div class="col-6 text-end">
+                <a href="{% url 'website:contact' %}" class="btn btn-success">
+                    <i class="fas fa-envelope me-2"></i>{% trans 'Contact Us' %}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

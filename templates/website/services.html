@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+
+{% block title %}{% trans 'Services' %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-success text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="fw-bold mb-2">{% trans 'Our Services' %}</h1>
+                <p class="mb-0 lead">{% trans 'Comprehensive financial solutions for a better tomorrow' %}</p>
+                <nav aria-label="breadcrumb" class="mt-2">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white text-decoration-none">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">{% trans 'Services' %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Grid -->
+<section class="py-5">
+    <div class="container">
+        {% if services %}
+        <div class="row g-4">
+            {% for service in services %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card service-card h-100 border-0 shadow-sm hover-lift">
+                    {% if service.image %}
+                    <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.title_en }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        {% if service.icon %}
+                        <i class="fas {{ service.icon }} fa-4x text-success"></i>
+                        {% else %}
+                        <i class="fas fa-hand-holding-usd fa-4x text-success"></i>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="service-icon-small bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                {% if service.icon %}
+                                <i class="fas {{ service.icon }} fa-lg"></i>
+                                {% else %}
+                                <i class="fas fa-hand-holding-usd fa-lg"></i>
+                                {% endif %}
+                            </div>
+                            <span class="badge bg-success bg-opacity-10 text-success">{{ service.get_service_type_display }}</span>
+                        </div>
+                        <h5 class="card-title fw-bold">
+                            {% if current_language == 'ne' %}{{ service.title_np }}{% else %}{{ service.title_en }}{% endif %}
+                        </h5>
+                        <p class="card-text text-muted">
+                            {% if current_language == 'ne' %}{{ service.short_description_np }}{% else %}{{ service.short_description_en }}{% endif %}
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 p-4 pt-0">
+                        <a href="{{ service.get_absolute_url }}" class="btn btn-success w-100">
+                            {% trans 'Learn More' %} <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <div class="alert alert-info">
+                <h5>{% trans 'Services will be updated soon.' %}</h5>
+                <p class="mb-0">{% trans 'Please check back later for our comprehensive list of services.' %}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mb-3 mb-lg-0">
+                <h3 class="fw-bold mb-2">{% trans 'Need Help Choosing a Service?' %}</h3>
+                <p class="mb-0 text-muted">{% trans 'Our team is ready to assist you in finding the right financial solution for your needs.' %}</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'website:contact' %}" class="btn btn-success btn-lg">
+                    <i class="fas fa-phone-alt me-2"></i>{% trans 'Contact Us' %}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

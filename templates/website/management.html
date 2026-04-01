@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Management Team' %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-success text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="fw-bold mb-2">{% trans 'Management Team' %}</h1>
+                <p class="mb-0 lead">{% trans 'Our dedicated professionals serving the cooperative' %}</p>
+                <nav aria-label="breadcrumb" class="mt-2">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white text-decoration-none">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'website:about' %}" class="text-white text-decoration-none">{% trans 'About Us' %}</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">{% trans 'Management' %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Management Team -->
+<section class="py-5">
+    <div class="container">
+        {% if team_members %}
+        <div class="row g-4">
+            {% for member in team_members %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card team-member-card h-100 border-0 shadow-sm text-center">
+                    <div class="card-img-wrapper position-relative">
+                        {% if member.photo %}
+                        <img src="{{ member.photo.url }}" class="card-img-top" alt="{{ member.name_en }}" style="height: 280px; object-fit: cover;">
+                        {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 280px;">
+                            <i class="fas fa-user-tie fa-5x text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div class="position-absolute bottom-0 start-0 w-100 bg-success text-white py-2">
+                            <span class="fw-bold">{{ member.get_position_display }}</span>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <h4 class="card-title fw-bold mb-2">
+                            {% if current_language == 'ne' %}{{ member.name_np }}{% else %}{{ member.name_en }}{% endif %}
+                        </h4>
+                        {% if member.bio_en %}
+                        <p class="card-text text-muted">
+                            {% if current_language == 'ne' %}{{ member.bio_np }}{% else %}{{ member.bio_en }}{% endif %}
+                        </p>
+                        {% endif %}
+                        <div class="contact-info mt-3">
+                            {% if member.phone %}
+                            <p class="mb-1 small">
+                                <i class="fas fa-phone text-success me-2"></i>{{ member.phone }}
+                            </p>
+                            {% endif %}
+                            {% if member.email %}
+                            <p class="mb-0 small">
+                                <i class="fas fa-envelope text-success me-2"></i>{{ member.email }}
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                <h5>{% trans 'Management team information will be updated soon' %}</h5>
+                <p class="mb-0">{% trans 'Please check back later for information about our management team.' %}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Organization Structure -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="fw-bold mb-3">{% trans 'Our Organizational Structure' %}</h2>
+                <p class="text-muted mb-4">
+                    {% trans 'Our cooperative follows a well-defined organizational structure that ensures transparency, accountability, and efficient service delivery. The management team works under the guidance of the Board of Directors to implement policies and serve our members effectively.' %}
+                </p>
+                <a href="{% url 'website:board' %}" class="btn btn-success">
+                    {% trans 'Meet Board of Directors' %}
+                </a>
+            </div>
+            <div class="col-lg-6">
+                <div class="org-chart bg-white p-4 rounded shadow">
+                    <div class="text-center mb-4">
+                        <div class="badge bg-success p-3">
+                            <i class="fas fa-users fa-2x mb-2"></i>
+                            <p class="mb-0 fw-bold">{% trans 'General Assembly' %}</p>
+                        </div>
+                    </div>
+                    <div class="text-center mb-4">
+                        <div class="badge bg-primary p-3">
+                            <i class="fas fa-user-tie fa-2x mb-2"></i>
+                            <p class="mb-0 fw-bold">{% trans 'Board of Directors' %}</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="badge bg-info text-dark p-3">
+                            <i class="fas fa-briefcase fa-2x mb-2"></i>
+                            <p class="mb-0 fw-bold">{% trans 'Management Team' %}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#e9ecef"/>
+  <text x="400" y="280" font-family="Arial, sans-serif" font-size="32" fill="#6c757d" text-anchor="middle">
+    About Cooperative
+  </text>
+  <text x="400" y="320" font-family="Arial, sans-serif" font-size="20" fill="#adb5bd" text-anchor="middle">
+    Placeholder Image
+  </text>
+</svg>

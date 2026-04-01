@@ -1,0 +1,482 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% if site_settings %}{{ site_settings.site_name_en }} - {{ site_settings.tagline_en }}{% else %}Women Community Multipurpose Cooperative Ltd.{% endif %}{% endblock %}
+
+{% block content %}
+<!-- Hero Slider Section -->
+{% if hero_slides %}
+<section id="heroSlider" class="hero-slider">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            {% for slide in hero_slides %}
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ forloop.counter0 }}" 
+                    {% if forloop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
+            {% endfor %}
+        </div>
+        <div class="carousel-inner">
+            {% for slide in hero_slides %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="hero-slide" style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('{{ slide.image.url }}') center/cover no-repeat;">
+                    <div class="container h-100">
+                        <div class="row h-100 align-items-center">
+                            <div class="col-lg-8 text-white">
+                                <h1 class="display-4 fw-bold mb-3 animate-fade-in">
+                                    {% if current_language == 'ne' %}{{ slide.title_np }}{% else %}{{ slide.title_en }}{% endif %}
+                                </h1>
+                                <p class="lead mb-4 animate-fade-in-delay">
+                                    {% if current_language == 'ne' %}{{ slide.subtitle_np }}{% else %}{{ slide.subtitle_en }}{% endif %}
+                                </p>
+                                {% if slide.button_url %}
+                                <a href="{{ slide.button_url }}" class="btn btn-success btn-lg animate-fade-in-delay-2">
+                                    {% if current_language == 'ne' %}{{ slide.button_text_np }}{% else %}{{ slide.button_text_en }}{% endif %}
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if hero_slides|length > 1 %}
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">{% trans 'Previous' %}</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">{% trans 'Next' %}</span>
+        </button>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Introduction Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="position-relative">
+                    {% if site_settings and site_settings.about_cooperative_image %}
+                    <img src="{{ site_settings.about_cooperative_image.url }}" alt="About Cooperative" class="img-fluid rounded shadow-lg">
+                    {% else %}
+                    <img src="{% static 'images/about-cooperative.svg' %}" alt="About Cooperative" class="img-fluid rounded shadow-lg">
+                    {% endif %}
+                    <div class="experience-badge bg-success text-white p-3 rounded shadow position-absolute bottom-0 end-0 translate-middle-y me-4">
+                        <h4 class="mb-0 fw-bold">{% if site_settings and site_settings.established_year %}{{ site_settings.established_year }}{% else %}2079{% endif %}</h4>
+                        <p class="mb-0">{% trans 'BS Established' %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h6 class="text-success fw-bold text-uppercase mb-2">{% trans 'Welcome to' %}</h6>
+                <h2 class="fw-bold mb-3">
+                    {% if current_language == 'ne' and site_settings %}{{ site_settings.site_name_np }}{% else %}{{ site_settings.site_name_en }}{% endif %}
+                </h2>
+                <p class="lead text-muted mb-4">
+                    {% trans 'Empowering women through financial inclusion, community development, and sustainable growth. We are dedicated to serving our members with integrity and excellence.' %}
+                </p>
+                <div class="row g-4 mb-4">
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <div class="feature-icon bg-success bg-opacity-10 text-success rounded-circle p-3 me-3">
+                                <i class="fas fa-users fa-lg"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold">{% if site_settings and site_settings.member_count %}{{ site_settings.member_count }}{% else %}5000+{% endif %}</h5>
+                                <small class="text-muted">{% trans 'Members' %}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <div class="feature-icon bg-success bg-opacity-10 text-success rounded-circle p-3 me-3">
+                                <i class="fas fa-map-marker-alt fa-lg"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold">{% if site_settings and site_settings.service_center_count %}{{ site_settings.service_center_count }}{% else %}3{% endif %}</h5>
+                                <small class="text-muted">{% trans 'Service Centers' %}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="{% url 'website:about' %}" class="btn btn-success">
+                    {% trans 'Learn More' %} <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h6 class="text-success fw-bold text-uppercase mb-2">{% trans 'Our Services' %}</h6>
+            <h2 class="fw-bold">{% trans 'What We Offer' %}</h2>
+            <p class="text-muted">{% trans 'Comprehensive financial solutions tailored for our community' %}</p>
+        </div>
+        
+        <div class="row g-4">
+            {% for service in services %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card service-card h-100 border-0 shadow-sm hover-shadow">
+                    <div class="card-body p-4">
+                        <div class="service-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                            {% if service.icon %}
+                            <i class="fas {{ service.icon }} fa-2x"></i>
+                            {% else %}
+                            <i class="fas fa-hand-holding-usd fa-2x"></i>
+                            {% endif %}
+                        </div>
+                        <h5 class="card-title fw-bold">
+                            {% if current_language == 'ne' %}{{ service.title_np }}{% else %}{{ service.title_en }}{% endif %}
+                        </h5>
+                        <p class="card-text text-muted">
+                            {% if current_language == 'ne' %}{{ service.short_description_np }}{% else %}{{ service.short_description_en }}{% endif %}
+                        </p>
+                        <a href="{% url 'website:service_detail' service.slug %}" class="btn btn-outline-success btn-sm">
+                            {% trans 'Learn More' %} <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">{% trans 'No services available at the moment.' %}</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'website:services' %}" class="btn btn-success">
+                {% trans 'View All Services' %} <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Women Empowerment Highlight -->
+<section class="py-5 women-empowerment">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h6 class="text-success fw-bold text-uppercase mb-2">{% trans 'Our Mission' %}</h6>
+                <h2 class="fw-bold mb-3">{% trans 'Empowering Women, Transforming Communities' %}</h2>
+                <p class="text-muted mb-4">
+                    {% trans 'We believe in the power of women to drive economic growth and social change. Our cooperative provides the tools, resources, and support needed for women to achieve financial independence and become leaders in their communities.' %}
+                </p>
+                <ul class="list-unstyled mb-4">
+                    <li class="mb-3 d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success me-3"></i>
+                        <span>{% trans 'Financial literacy and education programs' %}</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success me-3"></i>
+                        <span>{% trans 'Microfinance and small business loans' %}</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success me-3"></i>
+                        <span>{% trans 'Skills training and capacity building' %}</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success me-3"></i>
+                        <span>{% trans 'Networking and community support' %}</span>
+                    </li>
+                </ul>
+                <a href="{% url 'website:membership' %}" class="btn btn-success">
+                    {% trans 'Join Our Movement' %} <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-6">
+                        {% if site_settings and site_settings.empowerment_1_image %}
+                        <img src="{{ site_settings.empowerment_1_image.url }}" alt="Women Empowerment" class="img-fluid rounded shadow mb-3">
+                        {% else %}
+                        <img src="{% static 'images/empowerment-1.svg' %}" alt="Women Empowerment" class="img-fluid rounded shadow mb-3">
+                        {% endif %}
+                    </div>
+                    <div class="col-6 mt-4">
+                        {% if site_settings and site_settings.empowerment_2_image %}
+                        <img src="{{ site_settings.empowerment_2_image.url }}" alt="Community Development" class="img-fluid rounded shadow mb-3">
+                        {% else %}
+                        <img src="{% static 'images/empowerment-2.svg' %}" alt="Community Development" class="img-fluid rounded shadow mb-3">
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- VMGO Preview Section -->
+<section class="py-5 bg-success text-white">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="vmgo-card text-center p-4 bg-white bg-opacity-10 rounded h-100">
+                    <i class="fas fa-eye fa-3x mb-3 opacity-75"></i>
+                    <h5 class="fw-bold mb-2">{% trans 'Vision' %}</h5>
+                    <p class="small opacity-75">{% trans 'To be a leading cooperative empowering women for sustainable development' %}</p>
+                    <a href="{% url 'website:vmgo' %}" class="btn btn-outline-light btn-sm">{% trans 'Read More' %}</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="vmgo-card text-center p-4 bg-white bg-opacity-10 rounded h-100">
+                    <i class="fas fa-bullseye fa-3x mb-3 opacity-75"></i>
+                    <h5 class="fw-bold mb-2">{% trans 'Mission' %}</h5>
+                    <p class="small opacity-75">{% trans 'Providing financial services and opportunities for women entrepreneurship' %}</p>
+                    <a href="{% url 'website:vmgo' %}" class="btn btn-outline-light btn-sm">{% trans 'Read More' %}</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="vmgo-card text-center p-4 bg-white bg-opacity-10 rounded h-100">
+                    <i class="fas fa-flag fa-3x mb-3 opacity-75"></i>
+                    <h5 class="fw-bold mb-2">{% trans 'Goals' %}</h5>
+                    <p class="small opacity-75">{% trans 'Economic empowerment, social inclusion, and community welfare' %}</p>
+                    <a href="{% url 'website:vmgo' %}" class="btn btn-outline-light btn-sm">{% trans 'Read More' %}</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="vmgo-card text-center p-4 bg-white bg-opacity-10 rounded h-100">
+                    <i class="fas fa-tasks fa-3x mb-3 opacity-75"></i>
+                    <h5 class="fw-bold mb-2">{% trans 'Objectives' %}</h5>
+                    <p class="small opacity-75">{% trans 'Accessible services, member growth, and sustainable operations' %}</p>
+                    <a href="{% url 'website:vmgo' %}" class="btn btn-outline-light btn-sm">{% trans 'Read More' %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest News Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h6 class="text-success fw-bold text-uppercase mb-2">{% trans 'Stay Updated' %}</h6>
+                <h2 class="fw-bold mb-0">{% trans 'Latest News & Activities' %}</h2>
+            </div>
+            <a href="{% url 'website:news_list' %}" class="btn btn-outline-success d-none d-md-inline-flex">
+                {% trans 'View All News' %} <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+        
+        <div class="row g-4">
+            {% if featured_news %}
+            <div class="col-lg-6">
+                <div class="card featured-news-card border-0 shadow-sm h-100">
+                    <div class="position-relative">
+                        {% if featured_news.image %}
+                        <img src="{{ featured_news.image.url }}" class="card-img-top" alt="{{ featured_news.title_en }}" style="height: 300px; object-fit: cover;">
+                        {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+                            <i class="fas fa-newspaper fa-4x text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <span class="badge bg-success position-absolute top-0 start-0 m-3">{% trans 'Featured' %}</span>
+                    </div>
+                    <div class="card-body">
+                        <small class="text-muted">
+                            <i class="far fa-calendar-alt me-1"></i>{{ featured_news.published_date|date:"F d, Y" }}
+                            {% if featured_news.category %}
+                            <span class="mx-2">|</span>
+                            <i class="far fa-folder me-1"></i>
+                            {% if current_language == 'ne' %}{{ featured_news.category.name_np }}{% else %}{{ featured_news.category.name_en }}{% endif %}
+                            {% endif %}
+                        </small>
+                        <h4 class="card-title fw-bold mt-2">
+                            {% if current_language == 'ne' %}{{ featured_news.title_np }}{% else %}{{ featured_news.title_en }}{% endif %}
+                        </h4>
+                        <p class="card-text text-muted">
+                            {% if current_language == 'ne' %}{{ featured_news.excerpt_np }}{% else %}{{ featured_news.excerpt_en }}{% endif %}
+                        </p>
+                        <a href="{{ featured_news.get_absolute_url }}" class="btn btn-success">
+                            {% trans 'Read More' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    {% for news in latest_news %}
+                    {% if news != featured_news %}
+                    <div class="col-12">
+                        <div class="card news-card-horizontal border-0 shadow-sm">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    {% if news.image %}
+                                    <img src="{{ news.image.url }}" class="img-fluid rounded-start h-100" alt="{{ news.title_en }}" style="object-fit: cover;">
+                                    {% else %}
+                                    <div class="bg-light d-flex align-items-center justify-content-center h-100 rounded-start">
+                                        <i class="fas fa-newspaper fa-2x text-muted"></i>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <small class="text-muted">
+                                            <i class="far fa-calendar-alt me-1"></i>{{ news.published_date|date:"M d, Y" }}
+                                        </small>
+                                        <h6 class="card-title fw-bold mt-1">
+                                            {% if current_language == 'ne' %}{{ news.title_np }}{% else %}{{ news.title_en }}{% endif %}
+                                        </h6>
+                                        <a href="{{ news.get_absolute_url }}" class="btn btn-link text-success p-0 text-decoration-none">
+                                            {% trans 'Read More' %} <i class="fas fa-arrow-right ms-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% empty %}
+                    <div class="col-12">
+                        <p class="text-muted">{% trans 'No news available at the moment.' %}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4 d-md-none">
+            <a href="{% url 'website:news_list' %}" class="btn btn-outline-success">
+                {% trans 'View All News' %} <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Branches Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h6 class="text-success fw-bold text-uppercase mb-2">{% trans 'Our Network' %}</h6>
+            <h2 class="fw-bold">{% trans 'Service Centers' %}</h2>
+            <p class="text-muted">{% trans 'Conveniently located branches to serve you better' %}</p>
+        </div>
+        
+        <div class="row g-4">
+            {% for branch in branches %}
+            <div class="col-md-4">
+                <div class="card branch-card h-100 border-0 shadow-sm text-center">
+                    <div class="card-body p-4">
+                        <div class="branch-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-building fa-2x"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">
+                            {% if current_language == 'ne' %}{{ branch.name_np }}{% else %}{{ branch.name_en }}{% endif %}
+                        </h5>
+                        <p class="card-text text-muted small">
+                            {% if current_language == 'ne' %}{{ branch.address_np }}{% else %}{{ branch.address_en }}{% endif %}
+                        </p>
+                        {% if branch.phone %}
+                        <p class="mb-1 small">
+                            <i class="fas fa-phone text-success me-2"></i>{{ branch.phone }}
+                        </p>
+                        {% endif %}
+                        {% if branch.opening_hours_en %}
+                        <p class="mb-0 small text-muted">
+                            <i class="far fa-clock text-success me-2"></i>
+                            {% if current_language == 'ne' %}{{ branch.opening_hours_np }}{% else %}{{ branch.opening_hours_en }}{% endif %}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">{% trans 'Branch information will be updated soon.' %}</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'website:branches' %}" class="btn btn-success">
+                {% trans 'View All Locations' %} <i class="fas fa-map-marker-alt ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+{% if testimonials %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h6 class="text-success fw-bold text-uppercase mb-2">{% trans 'Testimonials' %}</h6>
+            <h2 class="fw-bold">{% trans 'What Our Members Say' %}</h2>
+        </div>
+        
+        <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for testimonial in testimonials %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="testimonial-card text-center p-5 bg-light rounded">
+                                <div class="mb-3">
+                                    {% for i in "12345" %}
+                                    <i class="fas fa-star text-warning {% if forloop.counter > testimonial.rating %}d-none{% endif %}"></i>
+                                    {% endfor %}
+                                </div>
+                                <p class="lead mb-4">
+                                    "{% if current_language == 'ne' %}{{ testimonial.testimonial_np }}{% else %}{{ testimonial.testimonial_en }}{% endif %}"
+                                </p>
+                                {% if testimonial.photo %}
+                                <img src="{{ testimonial.photo.url }}" alt="{{ testimonial.name_en }}" class="rounded-circle mb-3" width="80" height="80" style="object-fit: cover;">
+                                {% else %}
+                                <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-user fa-2x"></i>
+                                </div>
+                                {% endif %}
+                                <h5 class="fw-bold mb-1">
+                                    {% if current_language == 'ne' %}{{ testimonial.name_np }}{% else %}{{ testimonial.name_en }}{% endif %}
+                                </h5>
+                                <p class="text-muted mb-0">
+                                    {% if current_language == 'ne' %}{{ testimonial.designation_np }}{% else %}{{ testimonial.designation_en }}{% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if testimonials|length > 1 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-success rounded-circle p-3" aria-hidden="true"></span>
+                <span class="visually-hidden">{% trans 'Previous' %}</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-success rounded-circle p-3" aria-hidden="true"></span>
+                <span class="visually-hidden">{% trans 'Next' %}</span>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- CTA Section -->
+<section class="py-5 bg-dark text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mb-3 mb-lg-0">
+                <h3 class="fw-bold mb-2">{% trans 'Ready to Join Our Cooperative?' %}</h3>
+                <p class="mb-0 opacity-75">{% trans 'Become a member today and enjoy exclusive benefits, financial services, and community support.' %}</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'website:membership' %}" class="btn btn-success btn-lg">
+                    {% trans 'Apply for Membership' %} <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

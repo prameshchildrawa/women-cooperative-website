@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Membership Application' %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-success text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="fw-bold mb-2">{% trans 'Join Our Cooperative' %}</h1>
+                <p class="mb-0 lead">{% trans 'Become a member and enjoy exclusive benefits and services' %}</p>
+                <nav aria-label="breadcrumb" class="mt-2">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white text-decoration-none">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">{% trans 'Membership' %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Membership Benefits -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">{% trans 'Why Become a Member?' %}</h2>
+            <p class="text-muted">{% trans 'Join thousands of members who trust us with their financial needs' %}</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card benefit-card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="benefit-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 70px; height: 70px;">
+                        <i class="fas fa-percentage fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">{% trans 'Better Rates' %}</h5>
+                    <p class="text-muted mb-0 small">{% trans 'Enjoy competitive interest rates on savings and loans' %}</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card benefit-card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="benefit-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 70px; height: 70px;">
+                        <i class="fas fa-hand-holding-usd fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">{% trans 'Easy Loans' %}</h5>
+                    <p class="text-muted mb-0 small">{% trans 'Quick and hassle-free loan processing for members' %}</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card benefit-card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="benefit-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 70px; height: 70px;">
+                        <i class="fas fa-shield-alt fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">{% trans 'Secure Savings' %}</h5>
+                    <p class="text-muted mb-0 small">{% trans 'Your savings are safe and secure with us' %}</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card benefit-card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="benefit-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 70px; height: 70px;">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">{% trans 'Community' %}</h5>
+                    <p class="text-muted mb-0 small">{% trans 'Be part of a supportive financial community' %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Membership Form -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0"><i class="fas fa-user-plus me-2"></i>{% trans 'Membership Application Form' %}</h4>
+                    </div>
+                    <div class="card-body p-4 p-md-5">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        
+                        {% if request.GET.success %}
+                        <div class="alert alert-success text-center" role="alert">
+                            <i class="fas fa-check-circle fa-3x mb-3 text-success"></i>
+                            <h4>{% trans 'Application Submitted!' %}</h4>
+                            <p class="mb-0">{% trans 'Thank you for your interest. We will review your application and contact you within 3-5 business days.' %}</p>
+                            <a href="{% url 'website:home' %}" class="btn btn-success mt-3">
+                                <i class="fas fa-home me-2"></i>{% trans 'Return to Home' %}
+                            </a>
+                        </div>
+                        {% else %}
+                        <form method="post" enctype="multipart/form-data" class="membership-form">
+                            {% csrf_token %}
+                            
+                            <!-- Personal Information -->
+                            <h5 class="fw-bold mb-3 pb-2 border-bottom">{% trans 'Personal Information' %}</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label">{% trans 'Full Name' %} *</label>
+                                    {{ form.full_name }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% trans 'Date of Birth' %} *</label>
+                                    {{ form.date_of_birth }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% trans 'Gender' %} *</label>
+                                    {{ form.gender }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% trans 'Citizenship Number' %}</label>
+                                    {{ form.citizenship_number }}
+                                </div>
+                            </div>
+                            
+                            <!-- Contact Information -->
+                            <h5 class="fw-bold mb-3 pb-2 border-bottom">{% trans 'Contact Information' %}</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label">{% trans 'Phone Number' %} *</label>
+                                    {{ form.phone }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% trans 'Email Address' %}</label>
+                                    {{ form.email }}
+                                </div>
+                            </div>
+                            
+                            <!-- Address -->
+                            <h5 class="fw-bold mb-3 pb-2 border-bottom">{% trans 'Address' %}</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-12">
+                                    <label class="form-label">{% trans 'Street Address' %} *</label>
+                                    {{ form.address }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% trans 'Ward No.' %}</label>
+                                    {{ form.ward_number }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% trans 'Municipality' %} *</label>
+                                    {{ form.municipality }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% trans 'District' %} *</label>
+                                    {{ form.district }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">{% trans 'Province' %} *</label>
+                                    {{ form.province }}
+                                </div>
+                            </div>
+                            
+                            <!-- Membership Details -->
+                            <h5 class="fw-bold mb-3 pb-2 border-bottom">{% trans 'Membership Details' %}</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label">{% trans 'Membership Type' %} *</label>
+                                    {{ form.membership_type }}
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">{% trans 'Occupation' %}</label>
+                                    {{ form.occupation }}
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">{% trans 'Monthly Income (NPR)' %}</label>
+                                    {{ form.monthly_income }}
+                                </div>
+                            </div>
+                            
+                            <!-- Nominee Information -->
+                            <h5 class="fw-bold mb-3 pb-2 border-bottom">{% trans 'Nominee Information' %}</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label">{% trans 'Nominee Name' %}</label>
+                                    {{ form.nominee_name }}
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">{% trans 'Relationship' %}</label>
+                                    {{ form.nominee_relationship }}
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">{% trans 'Nominee Phone' %}</label>
+                                    {{ form.nominee_phone }}
+                                </div>
+                            </div>
+                            
+                            <!-- Documents -->
+                            <h5 class="fw-bold mb-3 pb-2 border-bottom">{% trans 'Documents' %}</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label">{% trans 'Photo' %}</label>
+                                    {{ form.photo }}
+                                    <small class="form-text text-muted">{% trans 'Recent passport size photo' %}</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% trans 'Citizenship Document' %}</label>
+                                    {{ form.citizenship_document }}
+                                    <small class="form-text text-muted">{% trans 'PDF, JPG, or PNG format' %}</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Terms -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                                    <label class="form-check-label" for="termsCheck">
+                                        {% trans 'I agree to the' %} <a href="{% url 'website:page_detail' 'terms-conditions' %}" target="_blank">{% trans 'Terms and Conditions' %}</a> {% trans 'and' %} <a href="{% url 'website:page_detail' 'privacy-policy' %}" target="_blank">{% trans 'Privacy Policy' %}</a>.
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Submit -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                <button type="submit" class="btn btn-success btn-lg px-5">
+                                    <i class="fas fa-paper-plane me-2"></i>{% trans 'Submit Application' %}
+                                </button>
+                                <a href="{% url 'website:home' %}" class="btn btn-outline-secondary btn-lg">
+                                    <i class="fas fa-times me-2"></i>{% trans 'Cancel' %}
+                                </a>
+                            </div>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact CTA -->
+<section class="py-5 bg-success text-white">
+    <div class="container text-center">
+        <h3 class="fw-bold mb-3">{% trans 'Have Questions?' %}</h3>
+        <p class="lead mb-4">{% trans 'Our team is here to help you with your membership application' %}</p>
+        <a href="{% url 'website:contact' %}" class="btn btn-light btn-lg">
+            <i class="fas fa-phone-alt me-2"></i>{% trans 'Contact Us' %}
+        </a>
+    </div>
+</section>
+{% endblock %}

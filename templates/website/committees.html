@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Committees' %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-success text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="fw-bold mb-2">{% trans 'Our Committees' %}</h1>
+                <p class="mb-0 lead">{% trans 'Specialized teams working for better governance' %}</p>
+                <nav aria-label="breadcrumb" class="mt-2">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white text-decoration-none">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'website:about' %}" class="text-white text-decoration-none">{% trans 'About Us' %}</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">{% trans 'Committees' %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Committees -->
+<section class="py-5">
+    <div class="container">
+        {% if committees %}
+        {% for committee in committees %}
+        <div class="card committee-section mb-5 border-0 shadow-sm">
+            <div class="card-header bg-success text-white py-3">
+                <h4 class="mb-0 fw-bold">
+                    <i class="fas fa-users-cog me-2"></i>
+                    {% if current_language == 'ne' %}{{ committee.name_np }}{% else %}{{ committee.name_en }}{% endif %}
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                {% if committee.description_en %}
+                <p class="text-muted mb-4">
+                    {% if current_language == 'ne' %}{{ committee.description_np|safe }}{% else %}{{ committee.description_en|safe }}{% endif %}
+                </p>
+                {% endif %}
+                
+                {% if committee.members.all %}
+                <h5 class="fw-bold mb-3">{% trans 'Committee Members' %}</h5>
+                <div class="row g-3">
+                    {% for member in committee.members.all %}
+                    {% if member.is_active %}
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card member-card h-100 border-0 bg-light">
+                            <div class="card-body text-center p-3">
+                                {% if member.photo %}
+                                <img src="{{ member.photo.url }}" alt="{{ member.name_en }}" class="rounded-circle mb-2" width="80" height="80" style="object-fit: cover;">
+                                {% else %}
+                                <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-user fa-2x"></i>
+                                </div>
+                                {% endif %}
+                                <h6 class="fw-bold mb-1">
+                                    {% if current_language == 'ne' %}{{ member.name_np }}{% else %}{{ member.name_en }}{% endif %}
+                                </h6>
+                                <p class="small text-muted mb-1">{{ member.designation }}</p>
+                                {% if member.phone %}
+                                <p class="small text-muted mb-0">
+                                    <i class="fas fa-phone me-1"></i>{{ member.phone }}
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="text-center py-5">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                <h5>{% trans 'Committee information will be updated soon' %}</h5>
+                <p class="mb-0">{% trans 'Please check back later for information about our committees.' %}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Governance Info -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h3 class="fw-bold mb-3">{% trans 'Good Governance' %}</h3>
+                <p class="lead text-muted">
+                    {% trans 'Our committees play a crucial role in ensuring transparency, accountability, and effective governance. Each committee focuses on specific areas to help the cooperative operate efficiently and serve our members better.' %}
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

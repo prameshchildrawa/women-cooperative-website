@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://msmc.com.np/sitemap.xml
+
+# Disallow admin routes
+Disallow: /admin/
+Disallow: /ckeditor/
+Disallow: /media/
+
+# Allow important pages
+Allow: /about/
+Allow: /services/
+Allow: /news/
+Allow: /publications/
+Allow: /notices/
+Allow: /contact/
+Allow: /membership/
+Allow: /branches/
+Allow: /faq/
+
+# Crawl rate
+Crawl-delay: 10

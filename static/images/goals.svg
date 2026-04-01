@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6f42c1;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#d63384;stop-opacity:0.6" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#grad3)"/>
+  <circle cx="400" cy="250" r="80" fill="rgba(255,255,255,0.2)"/>
+  <text x="400" y="270" font-family="Arial, sans-serif" font-size="48" fill="white" text-anchor="middle">Goals</text>
+  <text x="400" y="380" font-family="Arial, sans-serif" font-size="20" fill="rgba(255,255,255,0.8)" text-anchor="middle">Building Better Tomorrow</text>
+</svg>

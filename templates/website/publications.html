@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Publications' %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-success text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="fw-bold mb-2">{% trans 'Publications' %}</h1>
+                <p class="mb-0 lead">{% trans 'Annual reports, audit reports, and other important documents' %}</p>
+                <nav aria-label="breadcrumb" class="mt-2">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white text-decoration-none">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">{% trans 'Publications' %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Publications Content -->
+<section class="py-5">
+    <div class="container">
+        <!-- Filters -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <form action="{% url 'website:publications' %}" method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <select name="type" class="form-select">
+                            <option value="">{% trans 'All Types' %}</option>
+                            {% for type_value, type_label in publication_types %}
+                            <option value="{{ type_value }}" {% if current_type == type_value %}selected{% endif %}>{{ type_label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="year" class="form-select">
+                            <option value="">{% trans 'All Years' %}</option>
+                            {% for year in years %}
+                            <option value="{{ year }}" {% if current_year == year|stringformat:"i" %}selected{% endif %}>{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-filter me-2"></i>{% trans 'Filter' %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Publications Grid -->
+        {% if publications %}
+        <div class="row g-4">
+            {% for publication in publications %}
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="card publication-card h-100 border-0 shadow-sm hover-lift">
+                    {% if publication.cover_image %}
+                    <img src="{{ publication.cover_image.url }}" class="card-img-top" alt="{{ publication.title_en }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                        <div class="text-center">
+                            <i class="fas fa-file-pdf fa-4x text-danger mb-2"></i>
+                            <p class="text-muted small mb-0">{{ publication.get_publication_type_display }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <span class="badge bg-success bg-opacity-10 text-success mb-2">{{ publication.year }}</span>
+                        <h6 class="card-title fw-bold">
+                            {% if current_language == 'ne' %}{{ publication.title_np }}{% else %}{{ publication.title_en }}{% endif %}
+                        </h6>
+                        <p class="card-text small text-muted">
+                            {% if current_language == 'ne' %}{{ publication.description_np|truncatewords:15 }}{% else %}{{ publication.description_en|truncatewords:15 }}{% endif %}
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        <a href="{{ publication.file.url }}" class="btn btn-success btn-sm w-100" target="_blank" download>
+                            <i class="fas fa-download me-2"></i>{% trans 'Download' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_year %}&year={{ current_year }}{% endif %}">{% trans 'Previous' %}</a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_year %}&year={{ current_year }}{% endif %}">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_year %}&year={{ current_year }}{% endif %}">{% trans 'Next' %}</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <div class="text-center py-5">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                <h5>{% trans 'No publications found' %}</h5>
+                <p class="mb-0">{% trans 'Publications will be uploaded soon. Please check back later.' %}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

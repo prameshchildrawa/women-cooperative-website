@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Vision, Mission, Goals & Objectives' %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-success text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="fw-bold mb-2">{% trans 'Vision, Mission, Goals & Objectives' %}</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white text-decoration-none">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'website:about' %}" class="text-white text-decoration-none">{% trans 'About Us' %}</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">{% trans 'VMGO' %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- VMGO Content -->
+{% if vmgo %}
+<section class="py-5">
+    <div class="container">
+        <!-- Vision -->
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="vmgo-image-wrapper">
+                    {% if vmgo and vmgo.vision_image %}
+                    <img src="{{ vmgo.vision_image.url }}" alt="Vision" class="img-fluid rounded shadow">
+                    {% else %}
+                    <img src="{% static 'images/vision.svg' %}" alt="Vision" class="img-fluid rounded shadow">
+                    {% endif %}
+                    <div class="vmgo-icon bg-success text-white rounded-circle position-absolute top-0 start-0 translate-middle m-4">
+                        <i class="fas fa-eye fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h6 class="text-success fw-bold text-uppercase mb-2">{% trans 'Our Vision' %}</h6>
+                <h2 class="fw-bold mb-3">{% trans 'Where We Aspire to Be' %}</h2>
+                <div class="vmgo-content">
+                    {% if current_language == 'ne' %}{{ vmgo.vision_np|safe }}{% else %}{{ vmgo.vision_en|safe }}{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-5">
+
+        <!-- Mission -->
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
+                <div class="vmgo-image-wrapper">
+                    {% if vmgo and vmgo.mission_image %}
+                    <img src="{{ vmgo.mission_image.url }}" alt="Mission" class="img-fluid rounded shadow">
+                    {% else %}
+                    <img src="{% static 'images/mission.svg' %}" alt="Mission" class="img-fluid rounded shadow">
+                    {% endif %}
+                    <div class="vmgo-icon bg-success text-white rounded-circle position-absolute top-0 end-0 translate-middle m-4">
+                        <i class="fas fa-bullseye fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <h6 class="text-success fw-bold text-uppercase mb-2">{% trans 'Our Mission' %}</h6>
+                <h2 class="fw-bold mb-3">{% trans 'What We Do' %}</h2>
+                <div class="vmgo-content">
+                    {% if current_language == 'ne' %}{{ vmgo.mission_np|safe }}{% else %}{{ vmgo.mission_en|safe }}{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-5">
+
+        <!-- Goals -->
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="vmgo-image-wrapper">
+                    {% if vmgo and vmgo.goals_image %}
+                    <img src="{{ vmgo.goals_image.url }}" alt="Goals" class="img-fluid rounded shadow">
+                    {% else %}
+                    <img src="{% static 'images/goals.svg' %}" alt="Goals" class="img-fluid rounded shadow">
+                    {% endif %}
+                    <div class="vmgo-icon bg-success text-white rounded-circle position-absolute top-0 start-0 translate-middle m-4">
+                        <i class="fas fa-flag fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h6 class="text-success fw-bold text-uppercase mb-2">{% trans 'Our Goals' %}</h6>
+                <h2 class="fw-bold mb-3">{% trans 'What We Aim to Achieve' %}</h2>
+                <div class="vmgo-content">
+                    {% if current_language == 'ne' %}{{ vmgo.goals_np|safe }}{% else %}{{ vmgo.goals_en|safe }}{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-5">
+
+        <!-- Objectives -->
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
+                <div class="vmgo-image-wrapper">
+                    {% if vmgo and vmgo.objectives_image %}
+                    <img src="{{ vmgo.objectives_image.url }}" alt="Objectives" class="img-fluid rounded shadow">
+                    {% else %}
+                    <img src="{% static 'images/objectives.svg' %}" alt="Objectives" class="img-fluid rounded shadow">
+                    {% endif %}
+                    <div class="vmgo-icon bg-success text-white rounded-circle position-absolute top-0 end-0 translate-middle m-4">
+                        <i class="fas fa-tasks fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <h6 class="text-success fw-bold text-uppercase mb-2">{% trans 'Our Objectives' %}</h6>
+                <h2 class="fw-bold mb-3">{% trans 'How We Get There' %}</h2>
+                <div class="vmgo-content">
+                    {% if current_language == 'ne' %}{{ vmgo.objectives_np|safe }}{% else %}{{ vmgo.objectives_en|safe }}{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="py-5">
+    <div class="container text-center">
+        <div class="alert alert-info">
+            <h5>{% trans 'VMGO content will be updated soon.' %}</h5>
+            <p class="mb-0">{% trans 'Please check back later for our Vision, Mission, Goals, and Objectives.' %}</p>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Values Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h6 class="text-success fw-bold text-uppercase mb-2">{% trans 'Our Values' %}</h6>
+            <h2 class="fw-bold">{% trans 'Principles That Guide Us' %}</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card value-card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="value-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 80px; height: 80px;">
+                        <i class="fas fa-hands-helping fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">{% trans 'Cooperation' %}</h5>
+                    <p class="text-muted mb-0">{% trans 'Working together for mutual benefit and community development.' %}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card value-card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="value-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 80px; height: 80px;">
+                        <i class="fas fa-balance-scale fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">{% trans 'Integrity' %}</h5>
+                    <p class="text-muted mb-0">{% trans 'Maintaining transparency and ethical standards in all operations.' %}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card value-card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="value-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 80px; height: 80px;">
+                        <i class="fas fa-heart fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">{% trans 'Service' %}</h5>
+                    <p class="text-muted mb-0">{% trans 'Putting our members needs first with dedication and care.' %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

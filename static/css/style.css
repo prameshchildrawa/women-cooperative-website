@@ -1,0 +1,468 @@
+/* Custom CSS for Women Community Multipurpose Cooperative Ltd. */
+
+/* ===== CSS Variables ===== */
+:root {
+    --primary-color: #198754;
+    --primary-dark: #146c43;
+    --primary-light: #d1e7dd;
+    --secondary-color: #6c757d;
+    --text-dark: #212529;
+    --text-light: #6c757d;
+    --bg-light: #f8f9fa;
+    --bg-white: #ffffff;
+    --border-color: #dee2e6;
+    --transition-speed: 0.3s;
+}
+
+/* Dark Mode Variables */
+[data-bs-theme="dark"] {
+    --bg-light: #212529;
+    --bg-white: #2c3034;
+    --text-dark: #f8f9fa;
+    --text-light: #adb5bd;
+    --border-color: #373b3e;
+}
+
+/* ===== Base Styles ===== */
+body {
+    font-family: 'Mukta', 'Noto Sans Devanagari', sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+}
+
+/* ===== Top Bar ===== */
+.top-bar {
+    font-size: 0.9rem;
+}
+
+.language-switcher a:hover {
+    opacity: 0.8;
+}
+
+/* ===== Notice Ticker ===== */
+.notice-ticker {
+    overflow: hidden;
+}
+
+.ticker-wrap {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.ticker {
+    display: inline-block;
+    animation: ticker 30s linear infinite;
+}
+
+@keyframes ticker {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.ticker-item {
+    display: inline-block;
+    padding: 0 2rem;
+}
+
+/* ===== Navigation ===== */
+.navbar {
+    transition: var(--transition-speed);
+}
+
+.navbar-brand h5 {
+    font-size: 1.1rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: var(--transition-speed);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary-color) !important;
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item:hover {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+}
+
+/* ===== Hero Slider ===== */
+.hero-slide {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+}
+
+.hero-slider .carousel-item {
+    min-height: 500px;
+}
+
+.animate-fade-in {
+    animation: fadeInUp 1s ease-out;
+}
+
+.animate-fade-in-delay {
+    animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+.animate-fade-in-delay-2 {
+    animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Page Header ===== */
+.page-header {
+    position: relative;
+}
+
+.page-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), #28a745);
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* ===== Cards ===== */
+.card {
+    transition: var(--transition-speed);
+    border-radius: 0.5rem;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-5px);
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1) !important;
+}
+
+.service-card,
+.news-card,
+.branch-card,
+.publication-card,
+.about-nav-card {
+    transition: var(--transition-speed);
+}
+
+.service-icon,
+.feature-icon,
+.branch-icon,
+.value-icon,
+.benefit-icon {
+    transition: var(--transition-speed);
+}
+
+.service-card:hover .service-icon,
+.about-nav-card:hover .icon-wrapper {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+/* ===== Service Cards ===== */
+.service-icon-small {
+    transition: var(--transition-speed);
+}
+
+.service-card:hover .service-icon-small {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+/* ===== News Cards ===== */
+.news-card-horizontal {
+    transition: var(--transition-speed);
+}
+
+.news-card-horizontal:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ===== Board Members ===== */
+.board-member-card {
+    overflow: hidden;
+}
+
+.board-member-card:hover img {
+    transform: scale(1.05);
+}
+
+.board-member-card img {
+    transition: var(--transition-speed);
+}
+
+/* ===== VMGO Section ===== */
+.vmgo-image-wrapper {
+    position: relative;
+}
+
+.vmgo-icon {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== Women Empowerment Section ===== */
+.women-empowerment {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+/* ===== FAQ Section ===== */
+.faq-item {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    cursor: pointer;
+    padding: 1rem 0;
+    transition: var(--transition-speed);
+}
+
+.faq-question:hover {
+    color: var(--primary-color);
+}
+
+/* ===== Contact Page ===== */
+.contact-item .icon {
+    transition: var(--transition-speed);
+}
+
+.contact-item:hover .icon {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+/* ===== Map Section ===== */
+.map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ===== Form Styles ===== */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+/* ===== Button Styles ===== */
+.btn-success {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-success:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.btn-outline-success {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-success:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* ===== Dark Mode Adjustments ===== */
+[data-bs-theme="dark"] .card {
+    background-color: var(--bg-white);
+    border-color: var(--border-color);
+}
+
+[data-bs-theme="dark"] .bg-light {
+    background-color: var(--bg-light) !important;
+}
+
+[data-bs-theme="dark"] .text-muted {
+    color: var(--text-light) !important;
+}
+
+[data-bs-theme="dark"] .navbar-light {
+    background-color: var(--bg-white) !important;
+}
+
+[data-bs-theme="dark"] .dropdown-menu {
+    background-color: var(--bg-white);
+    border-color: var(--border-color);
+}
+
+[data-bs-theme="dark"] .dropdown-item {
+    color: var(--text-dark);
+}
+
+[data-bs-theme="dark"] .dropdown-item:hover {
+    background-color: var(--primary-dark);
+}
+
+/* ===== Footer ===== */
+footer {
+    margin-top: auto;
+}
+
+footer a:hover {
+    color: var(--primary-light) !important;
+}
+
+/* ===== Pagination ===== */
+.page-link {
+    color: var(--primary-color);
+}
+
+.page-link:hover {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+}
+
+.page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* ===== Alerts ===== */
+.alert-success {
+    background-color: var(--primary-light);
+    border-color: var(--primary-color);
+    color: var(--primary-dark);
+}
+
+/* ===== Modal ===== */
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+/* ===== Animations ===== */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in-up {
+    animation: slideInUp 0.5s ease-out;
+}
+
+/* ===== Responsive Adjustments ===== */
+@media (max-width: 768px) {
+    .hero-slide {
+        min-height: 400px;
+    }
+    
+    .hero-slide h1 {
+        font-size: 1.75rem;
+    }
+    
+    .hero-slide p.lead {
+        font-size: 1rem;
+    }
+    
+    .ticker {
+        animation-duration: 20s;
+    }
+}
+
+@media (max-width: 576px) {
+    .top-bar .col-md-6:last-child {
+        margin-top: 0.5rem;
+    }
+    
+    .language-switcher {
+        margin-right: 1rem !important;
+    }
+    
+    .hero-slide {
+        min-height: 350px;
+    }
+}
+
+/* ===== Print Styles ===== */
+@media print {
+    .top-bar,
+    .navbar,
+    footer,
+    .notice-ticker {
+        display: none;
+    }
+    
+    .page-header {
+        background: none !important;
+        color: black !important;
+    }
+}
+
+/* ===== Utility Classes ===== */
+.text-success {
+    color: var(--primary-color) !important;
+}
+
+.bg-success {
+    background-color: var(--primary-color) !important;
+}
+
+.bg-success-subtle {
+    background-color: var(--primary-light) !important;
+}
+
+.border-success {
+    border-color: var(--primary-color) !important;
+}
+
+/* ===== Nepali Font Support ===== */
+[lang="ne"] body,
+[lang="ne"] h1,
+[lang="ne"] h2,
+[lang="ne"] h3,
+[lang="ne"] h4,
+[lang="ne"] h5,
+[lang="ne"] h6,
+[lang="ne"] p {
+    font-family: 'Noto Sans Devanagari', 'Mukta', sans-serif;
+    line-height: 1.8;
+}
