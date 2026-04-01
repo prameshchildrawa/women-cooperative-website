@@ -1,11 +1,15 @@
 """URL configuration for website app."""
 from django.urls import path
 from . import views
+from .setup_views import create_admin
 
 
 app_name = 'website'
 
 urlpatterns = [
+    # Setup - REMOVE AFTER CREATING ADMIN!
+    path('setup/create-admin/', create_admin, name='create_admin'),
+    
     # Home
     path('', views.HomeView.as_view(), name='home'),
     
