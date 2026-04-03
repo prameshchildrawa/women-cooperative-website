@@ -198,11 +198,11 @@ Login to register.com.np (your domain registrar):
 ### 3.2 Upload Files
 **Method A: File Manager (Easier)**
 1. In cPanel, click **File Manager**
-2. Navigate to `/public_html/`
-3. Delete any existing files (like index.html)
-4. Click **Upload** → Select your `msmc_website.zip`
-5. After upload, right-click zip → **Extract**
-6. Move files from extracted folder to `/public_html/`
+2. Navigate to `/` (root home directory)
+3. Create folder `msmc` if it doesn't exist
+4. Upload your `msmc_website.zip` to `/msmc/`
+5. Right-click zip → **Extract**
+6. Move files from extracted folder to `/msmc/`
 
 **Method B: FTP (Faster for large files)**
 1. Download FileZilla (https://filezilla-project.org)
@@ -210,7 +210,7 @@ Login to register.com.np (your domain registrar):
 3. Upload files to `/public_html/`
 
 ### 3.3 Verify Upload
-In File Manager, check that `/public_html/` contains:
+In File Manager, check that `/msmc/` contains:
 - msmc/
 - website/
 - static/
@@ -230,15 +230,17 @@ In File Manager, check that `/public_html/` contains:
 2. Click **Create Application**
 3. Configure:
    - **Python Version:** 3.11
-   - **Application Root:** `public_html`
+   - **Application Root:** `msmc`
    - **Application URL:** (leave empty for root domain)
    - **Application Entry Point:** `passenger_wsgi.py`
 4. Click **Create**
 
+**Note:** Files will be uploaded to `/home/USERNAME/msmc/` instead of `/public_html/`
+
 ### 4.2 Note Virtual Environment Path
 The system will create a virtual environment. Note the path:
 ```
-/home/YOURUSERNAME/virtualenv/public_html/3.11/bin/python
+/home/YOURUSERNAME/virtualenv/msmc/3.11/bin/python
 ```
 
 You'll need this for configuration.
@@ -278,7 +280,7 @@ Replace:
 ## Step 6: Update Configuration Files
 
 ### 6.1 Update .htaccess
-Edit `/public_html/.htaccess` in File Manager:
+Edit `/msmc/.htaccess` in File Manager:
 
 ```apache
 RewriteEngine On
@@ -286,8 +288,8 @@ RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
 # Serve static files directly
-RewriteRule ^static/(.*)$ /home/YOURUSERNAME/public_html/staticfiles/$1 [L]
-RewriteRule ^media/(.*)$ /home/YOURUSERNAME/public_html/media/$1 [L]
+RewriteRule ^static/(.*)$ /home/YOURUSERNAME/msmc/staticfiles/$1 [L]
+RewriteRule ^media/(.*)$ /home/YOURUSERNAME/msmc/media/$1 [L]
 
 # Prevent access to sensitive files
 <FilesMatch "\.(env|ini|log|sh|sql|json|lock|py)$">
@@ -299,14 +301,14 @@ RewriteRule ^media/(.*)$ /home/YOURUSERNAME/public_html/media/$1 [L]
 Options -Indexes
 
 # Passenger WSGI Configuration
-PassengerPython /home/YOURUSERNAME/virtualenv/public_html/3.11/bin/python
-PassengerAppRoot /home/YOURUSERNAME/public_html
+PassengerPython /home/YOURUSERNAME/virtualenv/msmc/3.11/bin/python
+PassengerAppRoot /home/YOURUSERNAME/msmc
 PassengerAppType wsgi
 PassengerStartupFile passenger_wsgi.py
 ```
 
 ### 6.2 Update passenger_wsgi.py
-Edit `/public_html/passenger_wsgi.py`:
+Edit `/msmc/passenger_wsgi.py`:
 
 ```python
 import os
@@ -315,12 +317,12 @@ import sys
 # UPDATE THIS LINE ONLY:
 CPANEL_USERNAME = 'your_actual_cpanel_username'  # <-- CHANGE THIS
 
-project_home = f'/home/{CPANEL_USERNAME}/public_html'
+project_home = f'/home/{CPANEL_USERNAME}/msmc'
 if project_home not in sys.path:
     sys.path.insert(0, project_home)
 
 # Virtual environment
-venv_path = f'/home/{CPANEL_USERNAME}/virtualenv/public_html/3.11/bin/activate_this.py'
+venv_path = f'/home/{CPANEL_USERNAME}/virtualenv/msmc/3.11/bin/activate_this.py'
 if os.path.exists(venv_path):
     exec(open(venv_path).read(), {'__file__': venv_path})
 
@@ -343,10 +345,10 @@ If you have SSH access:
 ssh yourusername@yourserver.com
 
 # Navigate to project
-cd ~/public_html
+cd ~/msmc
 
 # Activate virtual environment
-source /home/yourusername/virtualenv/public_html/3.11/bin/activate
+source /home/yourusername/virtualenv/msmc/3.11/bin/activate
 
 # Upgrade pip
 pip install --upgrade pip
@@ -371,8 +373,8 @@ Some cPanel providers have a "Install dependencies" button in the Python App sec
 
 ### 8.1 Run Migrations
 ```bash
-cd ~/public_html
-source /home/yourusername/virtualenv/public_html/3.11/bin/activate
+cd ~/msmc
+source /home/yourusername/virtualenv/msmc/3.11/bin/activate
 
 # Create database tables
 python manage.py migrate
@@ -467,13 +469,13 @@ pip install -r requirements.txt
 
 **Error: "Permission denied"**
 ```bash
-chmod -R 755 /home/yourusername/public_html
+chmod -R 755 /home/yourusername/msmc
 ```
 
 **Error: "Database locked" (SQLite)**
 Switch to MySQL or ensure proper file permissions:
 ```bash
-chmod 666 /home/yourusername/public_html/db.sqlite3
+chmod 666 /home/yourusername/msmc/db.sqlite3
 ```
 
 **Error: "Static files not loading"**
@@ -493,8 +495,8 @@ Check error logs in cPanel → **Error Logs**
 ### 10.4 Check Application Status
 ```bash
 # Check if Django can start
-source /home/yourusername/virtualenv/public_html/3.11/bin/activate
-cd /home/yourusername/public_html
+source /home/yourusername/virtualenv/msmc/3.11/bin/activate
+cd /home/yourusername/msmc
 python manage.py check --deploy
 ```
 
@@ -504,13 +506,13 @@ python manage.py check --deploy
 
 ### Update Website Code
 ```bash
-cd ~/public_html
+cd ~/msmc
 git pull origin master  # If using git
 
 # Or upload new files via File Manager
 
 # Then restart
-source /home/yourusername/virtualenv/public_html/3.11/bin/activate
+source /home/yourusername/virtualenv/msmc/3.11/bin/activate
 pip install -r requirements.txt  # If requirements changed
 python manage.py migrate
 python manage.py collectstatic --noinput
@@ -521,7 +523,7 @@ python manage.py collectstatic --noinput
 ### Backup Database
 **SQLite:**
 ```bash
-cp /home/yourusername/public_html/db.sqlite3 /home/yourusername/backup_$(date +%Y%m%d).sqlite3
+cp /home/yourusername/msmc/db.sqlite3 /home/yourusername/backup_$(date +%Y%m%d).sqlite3
 ```
 
 **MySQL:**
@@ -539,35 +541,35 @@ In cPanel:
 
 ### Important Paths
 ```
-Project Root: /home/USERNAME/public_html/
-Virtual Env:  /home/USERNAME/virtualenv/public_html/3.11/
-Static Files: /home/USERNAME/public_html/staticfiles/
-Media Files:  /home/USERNAME/public_html/media/
-Database:     /home/USERNAME/public_html/db.sqlite3
+Project Root: /home/USERNAME/msmc/
+Virtual Env:  /home/USERNAME/virtualenv/msmc/3.11/
+Static Files: /home/USERNAME/msmc/staticfiles/
+Media Files:  /home/USERNAME/msmc/media/
+Database:     /home/USERNAME/msmc/db.sqlite3
 ```
 
 ### Essential Commands
 ```bash
 # Activate virtual environment
-source /home/USERNAME/virtualenv/public_html/3.11/bin/activate
+source /home/USERNAME/virtualenv/msmc/3.11/bin/activate
 
 # Run Django commands
-cd /home/USERNAME/public_html
+cd /home/USERNAME/msmc
 python manage.py migrate
 python manage.py collectstatic --noinput
 python manage.py createsuperuser
 python manage.py shell
 
 # Restart app (in cPanel: Setup Python App → Restart)
-touch /home/USERNAME/public_html/tmp/restart.txt
+touch /home/USERNAME/msmc/tmp/restart.txt
 ```
 
 ### File Permissions
 ```bash
 # Set correct permissions
-chmod -R 755 /home/USERNAME/public_html
-chmod 644 /home/USERNAME/public_html/.env
-chmod 666 /home/USERNAME/public_html/db.sqlite3  # If using SQLite
+chmod -R 755 /home/USERNAME/msmc
+chmod 644 /home/USERNAME/msmc/.env
+chmod 666 /home/USERNAME/msmc/db.sqlite3  # If using SQLite
 ```
 
 ---
