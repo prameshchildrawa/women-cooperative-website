@@ -1,0 +1,25 @@
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# Serve static files directly
+RewriteRule ^static/(.*)$ /home/CPANEL_USERNAME/msmc_website/staticfiles/$1 [L]
+RewriteRule ^media/(.*)$ /home/CPANEL_USERNAME/msmc_website/media/$1 [L]
+
+# Prevent access to sensitive files
+<FilesMatch "\.(env|ini|log|sh|sql|json|lock)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Disable directory browsing
+Options -Indexes
+
+# Set default charset
+AddDefaultCharset UTF-8
+
+# Passenger WSGI Configuration
+PassengerPython /home/CPANEL_USERNAME/virtualenv/msmc_website/3.11/bin/python
+PassengerAppRoot /home/CPANEL_USERNAME/msmc_website
+PassengerAppType wsgi
+PassengerStartupFile passenger_wsgi.py

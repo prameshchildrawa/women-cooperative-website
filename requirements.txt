@@ -9,3 +9,4 @@ whitenoise>=6.6.0
 django-compressor>=4.4
 cloudinary>=1.38.0
 dj3-cloudinary-storage>=0.0.6
+mysqlclient>=2.2.0
